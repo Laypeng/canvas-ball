@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	 <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js"></script>
+	<style>
+	    
+     #canvas {
+     	margin: 0 auto;
+     }
+	</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<script type="text/babel">
+	const canvas = document.getElementById('canvas');
+	const ctx = canvas.getContext('2d');
+	canvas.width = 1000;
+	canvas.height = 600;
+	canvas.style.background = '#000';
+
+
+	class Ball {
+		constructor(x,y,color) {
+			this.x=x;
+			this.y=y;
+			this.color=color;
+			this.r=40;
+		}
+
+		render() {
+			ctx.save();
+			ctx.beginPath();
+			ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+			ctx.fillStyle = this.color;
+			ctx.fill();
+			ctx.restore()
+		}
+	}
+
+
+	class moveBall extends Ball {
+		constructor(x,y,color) {
+			super(x,y,color);
+
+
+			this.dx = Math.random()*5-Math.random()*5;
+			this.dy = Math.random()*5-Math.random()*5;
+			this.dr = Math.random()+Math.random()*3;
+		}
+
+		upData() {
+			this.x+=this.dx;
+			this.y+=this.dy;
+			this.r-=this.dr;
+			if(this.r<0) {
+				this.r=0;
+			}
+		}
+	}
+    
+
+    let ballArr = [];
+    let colorArr = ['red','green','blue','yellow','pink','orange'];
+
+    canvas.addEventListener('mousemove',function(e) {
+    	
+    	for(let i=0;i<colorArr.length;i++) {
+    		ballArr.push(new moveBall(e.offsetX,e.offsetY,colorArr[i]))
+
+    		console.log(ballArr)
+    	}
+    	
+    	
+    })
+
+    setInterval(function() {
+    	ctx.clearRect(0,0,canvas.width,canvas.height)
+    	for(let i=0;i<ballArr.length;i++) {
+    		ballArr[i].render();
+    		ballArr[i].upData();
+    	}
+    }, 50)
+
+</script>
+</div>
+</body>
+</html>
